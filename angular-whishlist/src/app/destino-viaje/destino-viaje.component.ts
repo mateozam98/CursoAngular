@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, HostBinding, EventEmitter, Output } from '@angular/core';
 import { DestinoViaje } from './../../app/models/destino-viaje.model';
 
+
 @Component({
   selector: 'app-destino-viaje',
   templateUrl: './destino-viaje.component.html',
@@ -20,6 +21,15 @@ export class DestinoViajeComponent implements OnInit {
 
   ir(){
     this.clicked.emit(this.destino);
+    return false;
+  }
+
+  voteUp(){
+    this.store.dispatch
+    return false;
+  }
+
+  voteDown() {
     return false;
   }
 }
