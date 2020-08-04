@@ -1,6 +1,6 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { DestinoViaje } from './../models/destino-viaje.model';
-import {DestinoApiClient } from './../models/destino-api-client.model';
+import {DestinoApiClient } from './../models/destinos-api-client.model';
 import { Store, State } from '@ngrx/store';
 import { AppState } from '../app.module';
 import { dispatch } from 'rxjs/internal/observable/pairs';
