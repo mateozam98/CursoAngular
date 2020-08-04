@@ -1,6 +1,11 @@
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
-import { DestinoViaje } from './../../app/models/destino-viaje.model';
-import { DestinosApiClient } from './../../app/models/destinos-api-client.model';
+import { DestinoViaje } from './../models/destino-viaje.model';
+import {DestinoApiClient } from './../models/destino-api-client.model';
+import { Store, State } from '@ngrx/store';
+import { AppState } from '../app.module';
+import { dispatch } from 'rxjs/internal/observable/pairs';
+import { ElegidoFavoritoAction, NuevoDestinoAction } from '../models/destinos-viajes-state.model';
+
 
 @Component({
   selector: 'app-lista-destinos',
@@ -8,30 +13,34 @@ import { DestinosApiClient } from './../../app/models/destinos-api-client.model'
   styleUrls: ['./lista-destinos.component.css']
 })
 export class ListaDestinosComponent implements OnInit {
-
   @Output() onItemAdded: EventEmitter<DestinoViaje>;
-  updates: string[];
-  constructor(private destinoApiClient:DestinosApiClient,private store: Store<Appstate>) { 
+  update: string[];
+  all;
+  constructor(private destniApiClient: DestinoApiClient, private store : Store<AppState>) { 
     this.onItemAdded = new EventEmitter();
-    this.updates = [];
-    this.store.select(state => state.destinos.favorito)
-      .subscribe(d => {
-        if (d != null){
-          this.updates.push("Se ha elegido a " + d.nombre)
+    this.update = [];
+    this.store.select(state => state.destino.favorite)
+      .subscribe(data => {
+        if (data != null) {
+          this.update.push('se ha elegido a '+data.nombre)
         }
     });
+    store.select(state => state.destino.items).subscribe(items => this.all = items);
   }
 
-  ngOnInit(): void {
+  ngOnInit(){
   }
 
-  agregado(d: DestinoViaje) {
-  	this.destinoApiClient.add(d);
+  agregado(d: DestinoViaje){
+    this.destniApiClient.add(d);
     this.onItemAdded.emit(d);
-    this.store.dispatch(new NuevoDestinoAction(d));
   }
-  elegido(e: DestinoViaje){
-    this.destinoApiClient.elegir(e);
-    this.store.dispatch(new ElegidoFavoritoAction(e));
+
+  elegido (d:DestinoViaje) {
+    this.destniApiClient.elegir(d);
+  }
+
+  getAll(){
+
   }
 }

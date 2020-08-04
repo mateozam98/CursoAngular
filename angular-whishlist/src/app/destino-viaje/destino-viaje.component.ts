@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, HostBinding, EventEmitter, Output } from '@angular/core';
-import { DestinoViaje } from './../../app/models/destino-viaje.model';
-
+import { Component, OnInit, Input, HostBinding, Output, EventEmitter} from '@angular/core';
+import { DestinoViaje } from './../models/destino-viaje.model';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.module';
+import { VoteUpAction, VoteDownAction } from '../models/destinos-viajes-state.model';
 
 @Component({
   selector: 'app-destino-viaje',
@@ -8,28 +10,31 @@ import { DestinoViaje } from './../../app/models/destino-viaje.model';
   styleUrls: ['./destino-viaje.component.css']
 })
 export class DestinoViajeComponent implements OnInit {
-  @Input() destino: DestinoViaje;
+  @Input() destinos: DestinoViaje;
   @Input('idx') position: number;
-  @HostBinding('attr.class') cssClass = 'col-md-4';
-  @Output() clicked: EventEmitter<DestinoViaje>;
-  constructor() {
-    this.clicked = new EventEmitter();
-  }
+  @HostBinding('attr.class') cssClass ='col-sm-4';
+  @Output() onclicked: EventEmitter<DestinoViaje>;
 
-  ngOnInit(): void {
+  constructor(private store: Store<AppState>) {
+    this.onclicked = new EventEmitter();
+  }
+         
+  ngOnInit() {
   }
 
   ir(){
-    this.clicked.emit(this.destino);
+    this.onclicked.emit(this.destinos);
     return false;
   }
 
-  voteUp(){
-    this.store.dispatch
+  voteUp() {
+    this.store.dispatch(new VoteUpAction(this.destinos));
     return false;
   }
 
   voteDown() {
+    this.store.dispatch(new VoteDownAction(this.destinos));
     return false;
   }
+
 }
